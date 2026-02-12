@@ -103,29 +103,6 @@
             animation: pulse 0.5s ease-out;
         }
 
-        .music-control {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            padding: 15px 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .music-control:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-        }
-
-        .music-icon {
-            font-size: 1.5em;
-            margin-right: 10px;
-        }
-
         .footer {
             position: fixed;
             bottom: 20px;
@@ -229,11 +206,6 @@
         <div class="flowers-grid" id="flowersGrid"></div>
     </div>
 
-    <div class="music-control" id="musicControl">
-        <span class="music-icon">🎵</span>
-        <span id="musicStatus">Reproducir música</span>
-    </div>
-
     <div class="footer">
         Tu amor: Alejandro - 14/02/2026
     </div>
@@ -284,8 +256,6 @@
         // ============================================
 
         const flowersGrid = document.getElementById('flowersGrid');
-        const musicControl = document.getElementById('musicControl');
-        const musicStatus = document.getElementById('musicStatus');
         const backgroundMusic = document.getElementById('backgroundMusic');
         let isPlaying = false;
 
@@ -302,31 +272,15 @@
             card.addEventListener('click', () => {
                 card.classList.toggle('revealed');
                 if (!isPlaying) {
-                    playMusic();
+                    backgroundMusic.play().catch(err => {
+                        console.log('La música se reproducirá automáticamente');
+                    });
+                    isPlaying = true;
                 }
             });
             
             flowersGrid.appendChild(card);
         });
-
-        // Control de música
-        function playMusic() {
-            if (isPlaying) {
-                backgroundMusic.pause();
-                musicStatus.textContent = 'Reproducir música';
-                isPlaying = false;
-            } else {
-                backgroundMusic.play().then(() => {
-                    musicStatus.textContent = 'Pausar música';
-                    isPlaying = true;
-                }).catch(err => {
-                    console.log('Error al reproducir música:', err);
-                    alert('No se pudo reproducir la música. Asegúrate de que el archivo "musica.mp3" esté en la misma carpeta que este archivo HTML.');
-                });
-            }
-        }
-
-        musicControl.addEventListener('click', playMusic);
 
         // Crear corazones cayendo
         function createHeart() {
